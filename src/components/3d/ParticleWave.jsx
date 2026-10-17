@@ -3,15 +3,15 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { useTheme } from "../../context/ThemeContext";
 
-export const ParticleWave = () => {
+export const ParticleWave = ({ isMobile = false }) => {
   const pointsRef = useRef();
   const { currentTheme } = useTheme();
 
-  // Wave grid configuration
-  const { countX, countY, sep } = { countX: 75, countY: 75, sep: 0.28 };
+  const countX = isMobile ? 42 : 75;
+  const countY = isMobile ? 42 : 75;
+  const sep = isMobile ? 0.38 : 0.28;
   const numParticles = countX * countY;
 
-  // Generate baseline grid positions
   const [basePositions, positions, colors] = useMemo(() => {
     const base = new Float32Array(numParticles * 3);
     const pos = new Float32Array(numParticles * 3);
@@ -25,7 +25,7 @@ export const ParticleWave = () => {
       for (let iy = 0; iy < countY; iy++) {
         const x = (ix - countX / 2) * sep;
         const y = (iy - countY / 2) * sep * 0.45;
-        const z = -1.2; // Anchored safely behind the heading and central geometry
+        const z = -1.2;
 
         base[i * 3] = x;
         base[i * 3 + 1] = y;
@@ -35,7 +35,6 @@ export const ParticleWave = () => {
         pos[i * 3 + 1] = y;
         pos[i * 3 + 2] = z;
 
-        // Gradient blend from center outward
         const ratio =
           Math.sin((ix / countX) * Math.PI) * Math.sin((iy / countY) * Math.PI);
         const blended = primaryCol.clone().lerp(secondaryCol, 1 - ratio);
@@ -50,18 +49,16 @@ export const ParticleWave = () => {
     return [base, pos, col];
   }, [countX, countY, sep, currentTheme]);
 
-  // Animate harmonic wave motion and pointer interaction
   useFrame((state) => {
     if (!pointsRef.current) return;
 
-    const t = state.clock.getElapsedTime() * 1.5;
+    const t = state.clock.getElapsedTime() * 1.4;
     const { x: pointerX, y: pointerY } = state.pointer;
     const posAttr = pointsRef.current.geometry.attributes.position;
     const posArr = posAttr.array;
 
-    // Convert pointer to approximate 3D world plane coordinates
-    const targetX = pointerX * 7.5;
-    const targetY = pointerY * 4.5;
+    const targetX = pointerX * (isMobile ? 4.5 : 7.5);
+    const targetY = pointerY * (isMobile ? 3.0 : 4.5);
 
     let idx = 0;
     for (let ix = 0; ix < countX; ix++) {
@@ -71,20 +68,19 @@ export const ParticleWave = () => {
         const baseY = basePositions[i3 + 1];
         const baseZ = basePositions[i3 + 2];
 
-        // Harmonic undulating wave formula
         const wave =
-          Math.sin(ix * 0.3 + t) * 0.35 +
-          Math.cos(iy * 0.35 + t * 0.8) * 0.3 +
-          Math.sin((ix + iy) * 0.2 + t * 0.6) * 0.2;
+          Math.sin(ix * 0.3 + t) * 0.32 +
+          Math.cos(iy * 0.35 + t * 0.8) * 0.28 +
+          Math.sin((ix + iy) * 0.2 + t * 0.6) * 0.18;
 
-        // Cursor distance repulsion/elevation effect
         const dx = baseX - targetX;
         const dy = baseY - targetY;
         const distSq = dx * dx + dy * dy;
-        const cursorInfluence = Math.max(0, 1 - distSq / 12) * 0.9;
+        const cursorInfluence =
+          Math.max(0, 1 - distSq / (isMobile ? 8 : 12)) * 0.8;
 
-        posArr[i3 + 1] = baseY + wave * 0.4 + cursorInfluence * 0.5;
-        posArr[i3 + 2] = baseZ + wave * 0.6 + cursorInfluence * 1.1;
+        posArr[i3 + 1] = baseY + wave * 0.35 + cursorInfluence * 0.45;
+        posArr[i3 + 2] = baseZ + wave * 0.55 + cursorInfluence * 1.0;
 
         idx++;
       }
@@ -110,7 +106,7 @@ export const ParticleWave = () => {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={0.038}
+        size={isMobile ? 0.045 : 0.038}
         vertexColors
         transparent
         opacity={0.65}
