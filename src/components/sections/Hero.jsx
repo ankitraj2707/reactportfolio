@@ -3,6 +3,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Download, Terminal } from "lucide-react";
 import { CanvasContainer } from "../3d/CanvasContainer";
 import { PERSONAL_INFO } from "../../utils/constants";
+import { useTheme } from "../../context/ThemeContext";
 
 const TYPEWRITER_WORDS = [
   "Full Stack Developer",
@@ -13,22 +14,19 @@ const TYPEWRITER_WORDS = [
 export const Hero = () => {
   const shouldReduceMotion = useReducedMotion();
   const headingBoxRef = useRef(null);
+  const { currentTheme } = useTheme();
 
-  // Mouse radial glow coordinates
   const [mouseGlow, setMouseGlow] = useState({ x: 50, y: 50, opacity: 0 });
   const [isTouchDevice, setIsTouchDevice] = useState(false);
 
-  // Typewriter state
   const [wordIndex, setWordIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Detect touch screens to prevent mouse-following overlay artifacts
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
-  // Track cursor position inside the heading boundary
   const handleMouseMove = (e) => {
     if (isTouchDevice || shouldReduceMotion || !headingBoxRef.current) return;
     const rect = headingBoxRef.current.getBoundingClientRect();
@@ -41,7 +39,6 @@ export const Hero = () => {
     setMouseGlow((prev) => ({ ...prev, opacity: 0 }));
   };
 
-  // Measured typewriter lifecycle
   useEffect(() => {
     if (shouldReduceMotion) {
       setDisplayedText(TYPEWRITER_WORDS[0]);
@@ -73,15 +70,11 @@ export const Hero = () => {
     return () => clearTimeout(charTimeout);
   }, [displayedText, isDeleting, wordIndex, shouldReduceMotion]);
 
-  // Framer Motion staggered reveal variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.14,
-        delayChildren: 0.1,
-      },
+      transition: { staggerChildren: 0.14, delayChildren: 0.1 },
     },
   };
 
@@ -97,7 +90,6 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-      {/* 3D Canvas Layer */}
       <CanvasContainer />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 flex flex-col items-center text-center">
@@ -106,16 +98,23 @@ export const Hero = () => {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-electric-blue/30 bg-surface-base/80 backdrop-blur-md mb-8 shadow-[0_0_20px_rgba(0,210,255,0.15)]"
+          style={{
+            borderColor: `${currentTheme.primary}40`,
+            backgroundColor: `${currentTheme.primary}15`,
+          }}
+          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border backdrop-blur-md mb-8 shadow-lg"
         >
-          <span className="w-2 h-2 rounded-full bg-electric-blue animate-ping" />
-          <Terminal className="text-electric-blue" size={14} />
+          <span
+            className="w-2 h-2 rounded-full animate-ping"
+            style={{ backgroundColor: currentTheme.primary }}
+          />
+          <Terminal size={14} style={{ color: currentTheme.primary }} />
           <span className="text-xs font-mono font-medium text-slate-300 tracking-wide">
             Available for Engineering Roles & Projects
           </span>
         </motion.div>
 
-        {/* Heading Box with Radial Glow and Staggered Tokens */}
+        {/* Heading Box */}
         <div
           ref={headingBoxRef}
           onMouseMove={handleMouseMove}
@@ -127,7 +126,7 @@ export const Hero = () => {
               className="pointer-events-none absolute inset-0 -z-10 rounded-3xl transition-opacity duration-500 ease-out"
               style={{
                 opacity: mouseGlow.opacity,
-                background: `radial-gradient(400px circle at ${mouseGlow.x}% ${mouseGlow.y}%, rgba(0, 210, 255, 0.12), rgba(157, 78, 221, 0.08), transparent 70%)`,
+                background: `radial-gradient(400px circle at ${mouseGlow.x}% ${mouseGlow.y}%, ${currentTheme.primary}20, ${currentTheme.secondary}15, transparent 70%)`,
               }}
             />
           )}
@@ -151,16 +150,15 @@ export const Hero = () => {
               I'm
             </motion.span>{" "}
             <motion.span variants={itemVariants} className="inline-block">
-              <span className="chromatic-hover cursor-default">
-                <span className="gradient-name-text animate-gradient-pan inline-block font-extrabold">
-                  {PERSONAL_INFO.name}
-                </span>
+              {/* Reliable theme-aware gradient typography */}
+              <span className="theme-text-gradient font-extrabold tracking-tight">
+                {PERSONAL_INFO.name}
               </span>
             </motion.span>
           </motion.h1>
         </div>
 
-        {/* Subtitle with frosted shield for readability against the 3D canvas */}
+        {/* Subtitle with Frosted Glass Shield */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -169,24 +167,35 @@ export const Hero = () => {
         >
           <p className="text-base sm:text-xl lg:text-2xl text-slate-200 font-light leading-relaxed hero-text-shadow">
             <span className="font-semibold text-white inline-block min-w-[210px] text-left">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-200">
-                {displayedText}
-              </span>
-              <span className="typewriter-cursor" aria-hidden="true" />
+              <span>{displayedText}</span>
+              <span
+                className="typewriter-cursor"
+                style={{
+                  backgroundColor: currentTheme.primary,
+                  boxShadow: `0 0 10px ${currentTheme.primary}`,
+                }}
+                aria-hidden="true"
+              />
             </span>{" "}
             pursuing a{" "}
-            <span className="text-electric-blue font-normal">
+            <span
+              style={{ color: currentTheme.primary }}
+              className="font-normal"
+            >
               {PERSONAL_INFO.degree}
             </span>{" "}
             at{" "}
-            <span className="text-electric-violet font-normal">
+            <span
+              style={{ color: currentTheme.secondary }}
+              className="font-normal"
+            >
               {PERSONAL_INFO.institution}
             </span>
             .
           </p>
         </motion.div>
 
-        {/* Secondary description */}
+        {/* Description */}
         <motion.p
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -197,7 +206,7 @@ export const Hero = () => {
           interfaces, and scalable full-stack applications.
         </motion.p>
 
-        {/* CTA Buttons */}
+        {/* Action CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
@@ -206,7 +215,11 @@ export const Hero = () => {
         >
           <a
             href="#projects"
-            className="group flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-electric-blue to-electric-indigo text-slate-950 font-semibold text-sm hover:brightness-110 hover:scale-105 transition-all shadow-[0_0_25px_rgba(0,210,255,0.35)]"
+            style={{
+              background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+              boxShadow: `0 0 25px ${currentTheme.glowColor}`,
+            }}
+            className="group flex items-center gap-2.5 px-6 py-3.5 rounded-xl text-slate-950 font-semibold text-sm hover:brightness-110 hover:scale-105 transition-all"
           >
             Explore Projects
             <ArrowRight
@@ -218,7 +231,7 @@ export const Hero = () => {
           <a
             href="/resume.pdf"
             download
-            className="flex items-center gap-2.5 px-6 py-3.5 rounded-xl border border-surface-border bg-surface-base hover:bg-white/10 hover:border-electric-blue/40 text-white font-medium text-sm transition-all backdrop-blur-md hover:scale-105"
+            className="flex items-center gap-2.5 px-6 py-3.5 rounded-xl border border-surface-border bg-surface-base hover:bg-white/10 text-white font-medium text-sm transition-all backdrop-blur-md hover:scale-105"
           >
             <Download size={16} />
             Download Resume

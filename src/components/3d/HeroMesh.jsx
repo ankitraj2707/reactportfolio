@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Float, MeshDistortMaterial } from "@react-three/drei";
+import { useTheme } from "../../context/ThemeContext";
 
 export const HeroMesh = () => {
   const meshRef = useRef();
   const innerRef = useRef();
+  const { currentTheme } = useTheme();
 
   useFrame((state) => {
     const { x, y } = state.pointer;
@@ -27,13 +29,13 @@ export const HeroMesh = () => {
         <mesh ref={meshRef} scale={1.8}>
           <icosahedronGeometry args={[1, 1]} />
           <MeshDistortMaterial
-            color="#00d2ff"
+            color={currentTheme.primary}
             distort={0.3}
             speed={2}
             roughness={0.15}
             metalness={0.8}
             wireframe
-            emissive="#7b2cbf"
+            emissive={currentTheme.secondary}
             emissiveIntensity={0.6}
           />
         </mesh>
@@ -41,8 +43,8 @@ export const HeroMesh = () => {
         <mesh ref={innerRef} scale={1.1}>
           <octahedronGeometry args={[1, 0]} />
           <meshStandardMaterial
-            color="#9d4edd"
-            emissive="#00d2ff"
+            color={currentTheme.secondary}
+            emissive={currentTheme.primary}
             emissiveIntensity={0.4}
             roughness={0.2}
             metalness={0.9}

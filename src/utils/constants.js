@@ -17,13 +17,7 @@ export const PERSONAL_INFO = {
 export const SKILL_CATEGORIES = [
   {
     title: "Frontend Engineering",
-    skills: [
-      "React.js",
-      "JavaScript (ES6+)",
-      "Tailwind CSS",
-      "HTML5 / CSS3",
-      "Three.js / WebGL Basics",
-    ],
+    skills: ["React.js", "JavaScript (ES6+)", "Tailwind CSS", "HTML5 / CSS3"],
   },
   {
     title: "Backend & Systems",
@@ -38,21 +32,16 @@ export const SKILL_CATEGORIES = [
   {
     title: "Databases & Cloud",
     skills: [
-      "MongoDB",
+      "MySQL",
       "PostgreSQL",
-      "Firebase",
+      "Supabase",
       "Vercel",
       "Git / GitHub Workflow",
     ],
   },
   {
     title: "Core CS Fundamentals",
-    skills: [
-      "Data Structures & Algorithms",
-      "Object-Oriented Programming",
-      "Operating Systems",
-      "Computer Networks",
-    ],
+    skills: ["Operating Systems", "Computer Networks"],
   },
 ];
 

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Menu, X, Github, Linkedin, Globe } from "lucide-react";
 import { PERSONAL_INFO } from "../../utils/constants";
+import { ThemeToggle } from "../ui/ThemeToggle";
+import { useTheme } from "../../context/ThemeContext";
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { currentTheme } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,7 +36,12 @@ export const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <a href="#" className="flex items-center gap-2 group">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-electric-blue to-electric-violet p-[1px]">
+          <div
+            className="w-9 h-9 rounded-lg p-[1px] transition-all"
+            style={{
+              background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+            }}
+          >
             <div className="w-full h-full bg-[#050508] rounded-lg flex items-center justify-center transition-all group-hover:bg-transparent">
               <span className="font-display font-bold text-white text-base">
                 AR
@@ -41,11 +49,11 @@ export const Navbar = () => {
             </div>
           </div>
           <span className="font-display font-bold text-lg text-white tracking-tight">
-            Ankit<span className="text-electric-blue">.</span>
+            Ankit<span style={{ color: currentTheme.primary }}>.</span>
           </span>
         </a>
 
-        {/* Desktop Navigation Links */}
+        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <a
@@ -58,14 +66,16 @@ export const Navbar = () => {
           ))}
         </nav>
 
-        {/* Action / Social Icons */}
+        {/* Action icons + Theme Switcher */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
+
           <a
             href={PERSONAL_INFO.links.portfolio}
             target="_blank"
             rel="noopener noreferrer"
-            title="View Live Portfolio (v1)"
-            className="p-2 text-slate-400 hover:text-electric-blue hover:bg-white/5 rounded-lg transition-colors"
+            title="View Live Portfolio"
+            className="p-2 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
           >
             <Globe size={18} />
           </a>
@@ -89,23 +99,29 @@ export const Navbar = () => {
           </a>
           <a
             href="#contact"
-            className="text-xs uppercase tracking-wider font-semibold px-4 py-2 rounded-lg bg-gradient-to-r from-electric-blue to-electric-indigo text-slate-950 hover:brightness-110 transition-all shadow-[0_0_15px_rgba(0,210,255,0.3)]"
+            style={{
+              background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+              boxShadow: `0 0 15px ${currentTheme.glowColor}`,
+            }}
+            className="text-xs uppercase tracking-wider font-semibold px-4 py-2 rounded-lg text-slate-950 hover:brightness-110 transition-all"
           >
             Hire Me
           </a>
         </div>
 
-        {/* Mobile menu trigger */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-slate-300 p-2"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile menu toggle & theme toggle */}
+        <div className="flex md:hidden items-center gap-2">
+          <ThemeToggle />
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-slate-300 p-2"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#0a0a12] border-b border-surface-border px-6 py-6 flex flex-col gap-4">
           {navLinks.map((link) => (
@@ -123,7 +139,7 @@ export const Navbar = () => {
               href={PERSONAL_INFO.links.portfolio}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm text-electric-blue"
+              className="flex items-center gap-2 text-sm text-slate-300"
             >
               <Globe size={16} /> Live Portfolio
             </a>

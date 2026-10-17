@@ -3,9 +3,11 @@ import { Canvas } from "@react-three/fiber";
 import { HeroMesh } from "./HeroMesh";
 import { ParticleField } from "./ParticleField";
 import { useWebGLSupport } from "../../hooks/useWebGLSupport";
+import { useTheme } from "../../context/ThemeContext";
 
 export const CanvasContainer = () => {
   const isSupported = useWebGLSupport();
+  const { currentTheme } = useTheme();
 
   if (!isSupported) {
     return (
@@ -19,7 +21,7 @@ export const CanvasContainer = () => {
     <div className="absolute inset-0 pointer-events-none z-0">
       <Canvas
         className="pointer-events-auto"
-        camera={{ position: [0, 0, 5], fov: 45 }}
+        camera={{ position: [0, 0, 6.5], fov: 45 }}
         gl={{
           antialias: true,
           alpha: true,
@@ -30,9 +32,13 @@ export const CanvasContainer = () => {
         <directionalLight
           position={[10, 10, 5]}
           intensity={1.5}
-          color="#00d2ff"
+          color={currentTheme.primary}
         />
-        <pointLight position={[-10, -10, -5]} intensity={1.2} color="#9d4edd" />
+        <pointLight
+          position={[-10, -10, -5]}
+          intensity={1.2}
+          color={currentTheme.secondary}
+        />
 
         <Suspense fallback={null}>
           <ParticleField />

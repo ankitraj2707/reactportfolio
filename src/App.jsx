@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
+import { ThemeProvider } from "./context/ThemeContext";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { ScrollProgress } from "./components/layout/ScrollProgress";
@@ -24,24 +25,26 @@ export default function App() {
   }, []);
 
   return (
-    <div className="bg-[#050508] min-h-screen text-slate-100 relative selection:bg-electric-blue selection:text-black">
-      <AnimatePresence>{loading && <Loader key="loader" />}</AnimatePresence>
+    <ThemeProvider>
+      <div className="bg-[#050508] min-h-screen text-slate-100 relative selection:bg-electric-blue selection:text-black">
+        <AnimatePresence>{loading && <Loader key="loader" />}</AnimatePresence>
 
-      <ScrollProgress />
-      <Navbar />
+        <ScrollProgress />
+        <Navbar />
 
-      <main>
-        <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <GitHubActivity />
-        <ContributionCalendar />
-        <Hackathons />
-        <Contact />
-      </main>
+        <main>
+          <Hero />
+          <About />
+          <Skills />
+          <Projects />
+          <GitHubActivity />
+          <ContributionCalendar />
+          <Hackathons />
+          <Contact />
+        </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </ThemeProvider>
   );
 }
