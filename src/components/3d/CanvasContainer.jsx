@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { HeroMesh } from "./HeroMesh";
 import { ParticleField } from "./ParticleField";
+import { ParticleWave } from "./ParticleWave";
 import { useWebGLSupport } from "../../hooks/useWebGLSupport";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -21,14 +22,14 @@ export const CanvasContainer = () => {
     <div className="absolute inset-0 pointer-events-none z-0">
       <Canvas
         className="pointer-events-auto"
-        camera={{ position: [0, 0, 6.5], fov: 45 }}
+        camera={{ position: [0, 0.4, 8.6], fov: 45 }}
         gl={{
           antialias: true,
           alpha: true,
           powerPreference: "high-performance",
         }}
       >
-        <ambientLight intensity={0.7} />
+        <ambientLight intensity={0.8} />
         <directionalLight
           position={[10, 10, 5]}
           intensity={1.5}
@@ -41,7 +42,8 @@ export const CanvasContainer = () => {
         />
 
         <Suspense fallback={null}>
-          <ParticleField />
+          <ParticleField count={200} />
+          <ParticleWave />
           <HeroMesh />
         </Suspense>
       </Canvas>

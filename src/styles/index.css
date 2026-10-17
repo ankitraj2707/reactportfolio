@@ -17,7 +17,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Custom scrollbars */
+/* Custom modern scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -32,7 +32,67 @@ body {
   background: #3a3a5a;
 }
 
-/* Bulletproof Theme-Aware Text Gradients with WebKit Clipping */
+/* 1. Cybernetic Grid Horizon */
+.hero-cyber-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    #000 30%,
+    transparent 80%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 45%,
+    #000 30%,
+    transparent 80%
+  );
+}
+
+/* 2. Rotating Halos */
+@keyframes spinClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinCounterClockwise {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+.animate-halo-cw {
+  animation: spinClockwise 32s linear infinite;
+}
+
+.animate-halo-ccw {
+  animation: spinCounterClockwise 42s linear infinite;
+}
+
+/* 3. Cyber Corner Brackets */
+.cyber-bracket {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: currentColor;
+  opacity: 0.55;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+.group:hover .cyber-bracket {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* 4. Text Gradients & Text Clipping */
 .theme-text-gradient {
   background-clip: text;
   -webkit-background-clip: text;
@@ -41,7 +101,6 @@ body {
   display: inline-block;
 }
 
-/* Theme presets for the heading */
 [data-theme="cyberpunk"] .theme-text-gradient {
   background-image: linear-gradient(
     135deg,
@@ -90,7 +149,6 @@ body {
     drop-shadow(0 0 45px rgba(245, 158, 11, 0.45));
 }
 
-/* Default fallback before theme initializes */
 :not([data-theme]) .theme-text-gradient {
   background-image: linear-gradient(
     135deg,
@@ -103,12 +161,11 @@ body {
     drop-shadow(0 0 45px rgba(168, 85, 247, 0.45));
 }
 
-/* Clean text shadows against the 3D polygon */
+/* 5. Drop Shadows and Typewriter Cursor */
 .hero-text-shadow {
   filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.95));
 }
 
-/* Typewriter blinking cursor */
 .typewriter-cursor {
   display: inline-block;
   margin-left: 3px;
@@ -129,6 +186,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-halo-cw,
+  .animate-halo-ccw {
+    animation: none;
+  }
   .typewriter-cursor {
     animation: none;
     opacity: 1;
