@@ -4,6 +4,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { Navbar } from "./components/layout/Navbar";
 import { Footer } from "./components/layout/Footer";
 import { ScrollProgress } from "./components/layout/ScrollProgress";
+import { CanvasContainer } from "./components/3d/CanvasContainer";
 import { Hero } from "./components/sections/Hero";
 import { About } from "./components/sections/About";
 import { Skills } from "./components/sections/Skills";
@@ -32,7 +33,10 @@ export default function App() {
         <ScrollProgress />
         <Navbar />
 
-        <main>
+        {/* Global Full-Webpage Interactive 3D Particle Wave */}
+        <CanvasContainer />
+
+        <main className="relative z-10">
           <Hero />
           <About />
           <Skills />

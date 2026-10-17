@@ -22,19 +22,19 @@ export const CanvasContainer = () => {
 
   if (!isSupported) {
     return (
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-gradient-to-tr from-electric-blue/20 to-electric-violet/20 blur-3xl" />
+      <div className="fixed inset-0 pointer-events-none z-0 flex items-center justify-center">
+        <div className="w-64 h-64 rounded-full bg-gradient-to-tr from-electric-blue/20 to-electric-violet/20 blur-3xl" />
       </div>
     );
   }
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       <Canvas
         className="pointer-events-auto"
         camera={{
-          position: isMobile ? [0, 0.2, 9.8] : [0, 0.4, 8.6],
-          fov: isMobile ? 52 : 45,
+          position: isMobile ? [0, 0, 9.8] : [0, 0, 8.8],
+          fov: isMobile ? 54 : 45,
         }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
         gl={{
@@ -56,7 +56,7 @@ export const CanvasContainer = () => {
         />
 
         <Suspense fallback={null}>
-          <ParticleField count={isMobile ? 90 : 200} />
+          <ParticleField count={isMobile ? 100 : 220} />
           <ParticleWave isMobile={isMobile} />
           <HeroMesh isMobile={isMobile} />
         </Suspense>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Download, Terminal } from "lucide-react";
-import { CanvasContainer } from "../3d/CanvasContainer";
 import { PERSONAL_INFO } from "../../utils/constants";
 import { useTheme } from "../../context/ThemeContext";
 
@@ -93,10 +92,7 @@ export const Hero = () => {
       {/* 1. Cyber Grid Horizon */}
       <div className="absolute inset-0 hero-cyber-grid pointer-events-none z-0" />
 
-      {/* 2. Responsive 3D Canvas */}
-      <CanvasContainer />
-
-      {/* 3. Orbiting Rings (Scaled down on mobile viewports) */}
+      {/* 2. Orbiting Dual-Ring Tech Halos */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1] overflow-hidden">
         <div
           className="w-[300px] h-[300px] sm:w-[460px] sm:h-[460px] md:w-[680px] md:h-[680px] rounded-full border border-dashed animate-halo-cw opacity-20"
@@ -262,7 +258,7 @@ export const Hero = () => {
           interfaces, and scalable full-stack applications.
         </motion.p>
 
-        {/* Full-width responsive CTA buttons on small mobile */}
+        {/* CTA buttons */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}

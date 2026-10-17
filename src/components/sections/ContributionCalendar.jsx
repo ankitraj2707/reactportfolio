@@ -52,12 +52,12 @@ export const ContributionCalendar = () => {
               </a>
             </div>
 
-            {/* Mobile swipe helper */}
+            {/* Mobile swipe indicator */}
             <div className="w-full flex sm:hidden items-center justify-end gap-1 text-[10px] text-slate-500 font-mono mb-2">
               <MoveHorizontal size={12} /> Swipe to view full timeline
             </div>
 
-            {/* Scrollable Container */}
+            {/* Heatmap container */}
             <div className="w-full flex justify-start sm:justify-center items-center min-h-[130px] overflow-x-auto py-2 touch-pan-x">
               {!imgLoaded && (
                 <div className="w-full flex justify-center items-center gap-2 text-[#7d8590] text-xs font-mono py-8">
@@ -65,26 +65,24 @@ export const ContributionCalendar = () => {
                     className="animate-spin text-[#39d353]"
                     size={16}
                   />
-                  Loading graph...
+                  Loading GitHub contribution graph...
                 </div>
               )}
+              {/* Reliable GitHub dark green SVG chart endpoint */}
               <img
-                src={`https://github-readme-activity-graph.vercel.app/graph?username=${username}&theme=github-dark&hide_border=true&area=true`}
+                src={`https://ghchart.rshah.org/39d353/${username}`}
                 alt={`${username}'s GitHub contribution calendar`}
-                className={`min-w-[620px] sm:min-w-0 max-w-full transition-opacity duration-500 ${
+                className={`min-w-[620px] sm:min-w-0 max-w-full transition-opacity duration-500 filter brightness-110 contrast-125 ${
                   imgLoaded ? "opacity-100" : "opacity-0 h-0"
                 }`}
                 onLoad={() => setImgLoaded(true)}
-                onError={(e) => {
-                  e.currentTarget.src = `https://ghchart.rshah.org/39d353/${username}`;
-                }}
               />
             </div>
 
-            {/* Legend Footer */}
+            {/* Legend */}
             <div className="w-full flex flex-col sm:flex-row items-center justify-between text-xs text-[#7d8590] mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-[#21262d] gap-2 sm:gap-3">
               <span className="font-mono text-[10px] sm:text-[11px] text-center sm:text-left">
-                Synced with GitHub public commits.
+                Live automated data synced directly with GitHub public commits.
               </span>
 
               <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] font-sans">
